@@ -16,8 +16,6 @@ namespace BigBang_2.Models
         public string? Status { get; set; }
         public byte[]? ImageData { get; set; }
         public ICollection<Patient>? Patients { get; set; }
-        public Patient? Patient { get; set; }
-
 
     }
 }
