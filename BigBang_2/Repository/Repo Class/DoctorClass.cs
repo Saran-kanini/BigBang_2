@@ -15,7 +15,7 @@ namespace BigBang_2.Repository.Repo_Class
 
         public async Task<IEnumerable<Doctor>> GetDoctors()
         {
-            return await _context.Doctors.ToListAsync();
+            return await _context.Doctors.Include(x => x.Patients).ToListAsync();
         }
 
         public async Task<Doctor> GetDoctor(int id)
@@ -26,6 +26,7 @@ namespace BigBang_2.Repository.Repo_Class
         public async Task AddDoctor(Doctor doctor)
         {
             _context.Doctors.Add(doctor);
+
             await _context.SaveChangesAsync();
         }
 

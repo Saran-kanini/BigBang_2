@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BigBang_2.Models
 {
@@ -16,6 +17,8 @@ namespace BigBang_2.Models
         public string? Status { get; set; }
         public byte[]? ImageData { get; set; }
         public ICollection<Patient>? Patients { get; set; }
+        public ICollection<Appointment>? Appointments { get; set; }
+
 
     }
 }

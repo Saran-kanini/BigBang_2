@@ -1,7 +1,9 @@
 ﻿using BigBang_2.Models;
 using BigBang_2.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace BigBang_2.Controllers
 {
@@ -39,7 +41,8 @@ namespace BigBang_2.Controllers
         }
 
         // PUT: api/Patients/5
-        [HttpPut("{id}")]
+/*        [Authorize(Roles = "Admin")]
+*/        [HttpPut("{id}")]
         public async Task<IActionResult> PutPatient(int id, Patient patient)
         {
             if (id != patient.Patient_Id)
@@ -53,7 +56,8 @@ namespace BigBang_2.Controllers
         }
 
         // POST: api/Patients
-        [HttpPost]
+/*        [Authorize(Roles = "Admin")]
+*/        [HttpPost]
         public async Task<ActionResult<Patient>> PostPatient(Patient patient)
         {
             await _patientRepository.AddPatient(patient);
@@ -62,7 +66,8 @@ namespace BigBang_2.Controllers
         }
 
         // DELETE: api/Patients/5
-        [HttpDelete("{id}")]
+/*        [Authorize(Roles = "Admin")]
+*/        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(int id)
         {
             var patient = await _patientRepository.GetPatient(id);

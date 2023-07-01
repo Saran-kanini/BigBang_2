@@ -1,6 +1,7 @@
 ﻿using BigBang_2.Models;
 using BigBang_2.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace BigBang_2.Repository.Repo_Class
 {
@@ -26,8 +27,16 @@ namespace BigBang_2.Repository.Repo_Class
         public async Task AddPatient(Patient patient)
         {
             _context.Patients.Add(patient);
+
+            if (patient.Doctors != null)
+            {
+                var r = _context.Doctors.Find(patient.Doctors.Doctor_Id);
+                patient.Doctors = r;
+            }
+
             await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdatePatient(Patient patient)
         {

@@ -1,8 +1,10 @@
 ﻿using BigBang_2.Models;
 using BigBang_2.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace BigBang_2.Controllers
 {
@@ -42,19 +44,27 @@ namespace BigBang_2.Controllers
         }
 
         // PUT: api/Doctors/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctor(int id, Doctor doctor)
+/*        [Authorize(Roles = "Admin")]
+*/        [HttpPut("{id}")]
+
+        public async Task<IActionResult> PutDoctor(int id, [FromForm] Doctor doctor, IFormFile imageFile)
         {
             if (id != doctor.Doctor_Id)
             {
                 return BadRequest();
             }
 
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var imageData = await ConvertImageToByteArray(imageFile);
+                doctor.ImageData = imageData;
+            }
+
             try
             {
                 await _doctorRepository.UpdateDoctor(doctor);
             }
-            catch (DbUpdateConcurrencyException)
+            catch
             {
                 if (!await _doctorRepository.DoctorExists(id))
                 {
@@ -69,8 +79,10 @@ namespace BigBang_2.Controllers
             return NoContent();
         }
 
+
         // POST: api/Doctors
-        [HttpPost]
+/*        [Authorize(Roles = "Admin")]
+*/        [HttpPost]
         public async Task<ActionResult<Doctor>> PostDoctor(IFormFile imageFile, [FromForm] Doctor doctor)
         {
             if (imageFile == null || imageFile.Length <= 0)
@@ -96,7 +108,8 @@ namespace BigBang_2.Controllers
         }
 
         // DELETE: api/Doctors/5
-        [HttpDelete("{id}")]
+/*        [Authorize(Roles = "Admin")]
+*/        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDoctor(int id)
         {
             var doctor = await _doctorRepository.GetDoctor(id);
@@ -111,3 +124,4 @@ namespace BigBang_2.Controllers
         }
     }
 }
+

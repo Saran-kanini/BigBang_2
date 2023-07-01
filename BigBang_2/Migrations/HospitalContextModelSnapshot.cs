@@ -41,6 +41,35 @@ namespace BigBang_2.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("BigBang_2.Models.Appointment", b =>
+                {
+                    b.Property<int>("Appointment_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Appointment_Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Appointment_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Doctor_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Patient_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Appointment_Id");
+
+                    b.HasIndex("Doctor_Id");
+
+                    b.HasIndex("Patient_Id");
+
+                    b.ToTable("Appointments");
+                });
+
             modelBuilder.Entity("BigBang_2.Models.Doctor", b =>
                 {
                     b.Property<int>("Doctor_Id")
@@ -92,6 +121,9 @@ namespace BigBang_2.Migrations
                     b.Property<int?>("Doctor_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DoctorsDoctor_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
@@ -103,23 +135,45 @@ namespace BigBang_2.Migrations
 
                     b.HasKey("Patient_Id");
 
-                    b.HasIndex("Doctor_Id");
+                    b.HasIndex("DoctorsDoctor_Id");
 
                     b.ToTable("Patients");
                 });
 
-            modelBuilder.Entity("BigBang_2.Models.Patient", b =>
+            modelBuilder.Entity("BigBang_2.Models.Appointment", b =>
                 {
                     b.HasOne("BigBang_2.Models.Doctor", "Doctor")
-                        .WithMany("Patients")
+                        .WithMany("Appointments")
                         .HasForeignKey("Doctor_Id");
 
+                    b.HasOne("BigBang_2.Models.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("Patient_Id");
+
                     b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("BigBang_2.Models.Patient", b =>
+                {
+                    b.HasOne("BigBang_2.Models.Doctor", "Doctors")
+                        .WithMany("Patients")
+                        .HasForeignKey("DoctorsDoctor_Id");
+
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("BigBang_2.Models.Doctor", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("BigBang_2.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
