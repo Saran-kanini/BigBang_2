@@ -10,8 +10,8 @@ namespace BigBang_2.Models
 
         public int Patient_Id { get; set; }
         public string? Patient_Name { get; set; }
-        public string? Disease { get; set; }
-        public string? Disease_Description { get;set; }
+        public string? Gender { get; set; }
+        public int? Patient_Age { get;set; }
 
         [DataType(DataType.PhoneNumber)]
         public string? Patient_No { get; set; }

@@ -45,5 +45,26 @@ namespace BigBang_2.Repository.Repo_Class
         {
             return await _context.Admins.AnyAsync(e => e.Admin_Id == id);
         }
+
+        // Additional methods for handling doctors
+        public async Task<IEnumerable<Doctor>> GetDoctorRequests()
+        {
+            return await _context.Doctors.Where(d => d.Status == "Pending").ToListAsync();
+        }
+
+        public async Task<Doctor> GetDoctor(int id)
+        {
+            return await _context.Doctors.FindAsync(id);
+        }
+
+        public async Task UpdateDoctor(Doctor doctor)
+        {
+            _context.Entry(doctor).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<Doctor>> GetDoctorsWithPendingStatus()
+        {
+            return await _context.Doctors.Where(d => d.Status == "Pending").ToListAsync();
+        }
     }
 }

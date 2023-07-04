@@ -2,6 +2,7 @@
 using BigBang_2.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BigBang_2.Controllers
 {
@@ -75,5 +76,32 @@ namespace BigBang_2.Controllers
 
             return NoContent();
         }
+        // GET: api/Admins/DoctorRequests
+        [HttpGet("DoctorRequests")]
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorRequests()
+        {
+            var doctorRequests = await _adminRepository.GetDoctorsWithPendingStatus();
+            return Ok(doctorRequests);
+        }
+
+
+        // POST: api/Admins/ApproveDoctorRequest/5
+        [HttpPost("ApproveDoctorRequest/{id}")]
+        public async Task<IActionResult> ApproveDoctorRequest(int id)
+        {
+            var doctor = await _adminRepository.GetDoctor(id); // Assuming the repository method is implemented to retrieve a doctor by ID
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            // Update the status of the doctor to "Approved"
+            doctor.Status = "Approved";
+            await _adminRepository.UpdateDoctor(doctor); // Assuming the repository method is implemented to update the doctor
+
+            return NoContent();
+        }
+
+
     }
 }

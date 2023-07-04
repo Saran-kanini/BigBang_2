@@ -10,5 +10,12 @@ namespace BigBang_2.Repository.Interface
         Task UpdateAdmin(Admin admin);
         Task DeleteAdmin(Admin admin);
         Task<bool> AdminExists(int id);
+
+        // Additional methods for handling doctors
+        Task<IEnumerable<Doctor>> GetDoctorRequests();
+        Task<Doctor> GetDoctor(int id);
+        Task UpdateDoctor(Doctor doctor);
+        Task<IEnumerable<Doctor>> GetDoctorsWithPendingStatus();
+
     }
 }

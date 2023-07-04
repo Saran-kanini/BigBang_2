@@ -4,6 +4,7 @@ using BigBang_2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BigBang_2.Migrations
 {
     [DbContext(typeof(HospitalContext))]
-    partial class HospitalContextModelSnapshot : ModelSnapshot
+    [Migration("20230704193443_sample3")]
+    partial class sample3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,15 +57,15 @@ namespace BigBang_2.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Doctor_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Doctor_Id1")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
                     b.Property<string>("PatientEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PatientName")
                         .IsRequired()
@@ -73,17 +75,11 @@ namespace BigBang_2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Patient_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Patient_Id1")
-                        .HasColumnType("int");
-
                     b.HasKey("Appointment_Id");
 
-                    b.HasIndex("Doctor_Id1");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("Patient_Id1");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Appointments");
                 });
@@ -162,11 +158,15 @@ namespace BigBang_2.Migrations
                 {
                     b.HasOne("BigBang_2.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
-                        .HasForeignKey("Doctor_Id1");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BigBang_2.Models.Patient", "Patient")
                         .WithMany("Appointments")
-                        .HasForeignKey("Patient_Id1");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
 

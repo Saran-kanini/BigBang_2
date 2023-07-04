@@ -92,12 +92,20 @@ namespace BigBang_2.Controllers
 
             var imageData = await ConvertImageToByteArray(imageFile);
             doctor.ImageData = imageData;
+            doctor.Status = "Pending";
 
             await _doctorRepository.AddDoctor(doctor);
+            SendApprovalRequestToAdmin(doctor.Doctor_Id);
+
 
             return CreatedAtAction("GetDoctor", new { id = doctor.Doctor_Id }, doctor);
         }
+        private void SendApprovalRequestToAdmin(int doctorId)
+        {
+            // Implement the logic to send an approval request to the admin
+        }
 
+        
         private async Task<byte[]> ConvertImageToByteArray(IFormFile imageFile)
         {
             using (var memoryStream = new MemoryStream())
@@ -121,6 +129,14 @@ namespace BigBang_2.Controllers
             await _doctorRepository.DeleteDoctor(doctor);
 
             return NoContent();
+        }
+        [HttpGet("ApprovedDoctors")]
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetApprovedDoctors()
+        {
+            var doctors = await _doctorRepository.GetDoctors();
+            var approvedDoctors = doctors.Where(d => d.Status == "Approved");
+
+            return Ok(approvedDoctors);
         }
     }
 }

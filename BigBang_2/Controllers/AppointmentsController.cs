@@ -29,7 +29,7 @@ namespace BigBang_2.Controllers
           {
               return NotFound();
           }
-            return await _context.Appointments.ToListAsync();
+            return await _context.Appointments.Include(a => a.Patient).Include(a => a.Doctor).ToListAsync();
         }
 
         // GET: api/Appointments/5
@@ -91,15 +91,11 @@ namespace BigBang_2.Controllers
               return Problem("Entity set 'HospitalContext.Appointments'  is null.");
           }
             _context.Appointments.Add(appointment);
-            var r = _context.Doctors.Find(appointment.Doctor.Doctor_Id);
-            appointment.Doctor = r;
-            var y = _context.Patients.Find(appointment.Patient.Patient_Id);
-            appointment.Patient = y;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAppointment", new { id = appointment.Appointment_Id }, appointment);
         }
-
+            
         // DELETE: api/Appointments/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
